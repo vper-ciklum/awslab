@@ -14,3 +14,4 @@
 
 /variables.tf
 .terraform*
+/pln*

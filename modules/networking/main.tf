@@ -2,15 +2,21 @@
 // TODO break public and private into separate AZs
 data "aws_availability_zones" "available" {}
 
+locals {
+  vpc_cidr = "172.16.0.0/16"
+  private_cidr = "172.16.2.0/24"
+  public_cidr = "172.16.1.0/24"
+}
+
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   name                             = "${var.namespace}-vpc"
-  cidr                             = "172.16.0.0/16"
+  cidr                             = local.vpc_cidr
   azs                              = data.aws_availability_zones.available.names
   # private_subnets                  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets                  = ["172.16.2.0/24"]
+  private_subnets                  = [local.private_cidr]
   # public_subnets                   = ["10.0.101.0/24", "10.0.102.0/24"]
-  public_subnets                   = ["172.16.1.0/24"]
+  public_subnets                   = [local.public_cidr]
   #assign_generated_ipv6_cidr_block = true
   create_database_subnet_group     = true
   enable_nat_gateway               = true
@@ -62,7 +68,7 @@ resource "aws_security_group" "allow_ssh_priv" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [local.vpc_cidr]
   }
 
   egress {
