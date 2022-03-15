@@ -12,6 +12,6 @@
 
 *.pem
 
-/variables.tf
+#/variables.tf
 .terraform*
 /pln*
