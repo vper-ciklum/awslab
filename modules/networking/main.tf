@@ -45,6 +45,22 @@ resource "aws_security_group" "allow_ports_pub" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "HTTP from the internet"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "ICMP from the internet"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -53,7 +69,7 @@ resource "aws_security_group" "allow_ports_pub" {
   }
 
   tags = {
-    Name = "${var.namespace}-allow_ssh_pub"
+    Name = "${var.namespace}-allow_ports_pub"
   }
 }
 
@@ -71,6 +87,22 @@ resource "aws_security_group" "allow_ports_priv" {
     cidr_blocks = [local.vpc_cidr]
   }
 
+  ingress {
+    description = "DB only from internal VPC clients"
+    from_port   = 3110
+    to_port     = 3110
+    protocol    = "tcp"
+    cidr_blocks = [local.vpc_cidr]
+  }
+
+  ingress {
+    description = "ICMP from the internet"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -79,6 +111,6 @@ resource "aws_security_group" "allow_ports_priv" {
   }
 
   tags = {
-    Name = "${var.namespace}-allow_ssh_priv"
+    Name = "${var.namespace}-allow_ports_priv"
   }
 }
