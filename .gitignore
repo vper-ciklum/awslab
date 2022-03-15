@@ -13,3 +13,4 @@
 *.pem
 
 /variables.tf
+.terraform*
