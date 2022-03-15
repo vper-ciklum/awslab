@@ -31,10 +31,10 @@ module "vpc" {
   }
 }
 
-// SG to allow SSH connections from anywhere
-resource "aws_security_group" "allow_ssh_pub" {
-  name        = "${var.namespace}-allow_ssh"
-  description = "Allow SSH inbound traffic"
+// SG to allow connections from anywhere
+resource "aws_security_group" "allow_ports_pub" {
+  name        = "${var.namespace}-allow_ports_pub"
+  description = "Allow inbound traffic for some ports and protocols"
   vpc_id      = module.vpc.vpc_id
 
   ingress {
@@ -57,10 +57,10 @@ resource "aws_security_group" "allow_ssh_pub" {
   }
 }
 
-// SG to onlly allow SSH connections from VPC public subnets
-resource "aws_security_group" "allow_ssh_priv" {
-  name        = "${var.namespace}-allow_ssh_priv"
-  description = "Allow SSH inbound traffic"
+// SG to only allow connections from VPC
+resource "aws_security_group" "allow_ports_priv" {
+  name        = "${var.namespace}-allow_ports_priv"
+  description = "Allow inbound traffic from VPC"
   vpc_id      = module.vpc.vpc_id
 
   ingress {
